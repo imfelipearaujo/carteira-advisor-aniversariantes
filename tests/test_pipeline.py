@@ -17,7 +17,7 @@ import main
 from src.cadastral import ActivityStatus, CadastralStatus
 from src.config import MoneyUnit, Settings
 from src.errors import CollectionIntegrityError, ConfigurationError, ExitCode, IntegrationError
-from src.exporter import PROVISIONAL_NOTE, SHEET_NAME
+from src.exporter import SHEET_NAME
 from src.pipeline import run
 from src.reconciliation import AuditStatus
 from src.summary import format_brl, render_summary
@@ -248,11 +248,11 @@ def test_patrimony_column_from_current_value_zero_and_missing(settings: Settings
     assert result.pending_patrimony == 1
 
 
-def test_spreadsheet_flags_patrimony_as_provisional(settings: Settings) -> None:
+def test_spreadsheet_has_no_provisional_patrimony_note(settings: Settings) -> None:
     result = run_with(settings, FakeApi([make_client(1)], [], total=0))
     workbook = load_workbook(result.output_path)
-    assert workbook[SHEET_NAME].cell(1, 3).comment.text == PROVISIONAL_NOTE
-    assert workbook.properties.description == PROVISIONAL_NOTE
+    assert workbook[SHEET_NAME].cell(1, 3).comment is None
+    assert workbook.properties.description != "Patrimônio PROVISÓRIO"
 
 
 def test_pending_birthdates_are_last(settings: Settings) -> None:
