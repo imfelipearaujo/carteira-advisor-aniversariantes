@@ -14,7 +14,7 @@ from openpyxl.utils import get_column_letter
 
 from src.config import MoneyUnit
 from src.errors import ExportError, TransformationError
-from src.exporter import HEADERS, PENDING_TEXT, PROVISIONAL_NOTE, SHEET_NAME, to_reais
+from src.exporter import HEADERS, PENDING_TEXT, SHEET_NAME, to_reais
 from src.transformer import ReportRow, id_key
 
 EXCEL_RELATIVE_PRECISION = 1e-15
@@ -64,8 +64,8 @@ def validate_excel(path: Path, rows: list[ReportRow], money_unit: MoneyUnit) -> 
     if sheet.auto_filter.ref != expected_filter:
         raise ExportError("Autofiltro ausente ou sem cobrir todas as colunas do Excel.")
     comment = sheet.cell(1, 3).comment
-    if comment is None or comment.text != PROVISIONAL_NOTE:
-        raise ExportError("Aviso de patrimônio provisório ausente no Excel.")
+    if comment is not None:
+        raise ExportError("Comentário inesperado no cabeçalho de patrimônio.")
     if sheet.max_row - 1 != len(rows):
         raise ExportError(f"Excel contém {sheet.max_row - 1} linha(s); esperado {len(rows)}.")
 
