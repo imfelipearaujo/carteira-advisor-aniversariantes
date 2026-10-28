@@ -1,0 +1,30 @@
+[project]
+name = "carteira-advisor-aniversarios"
+version = "1.0.0"
+description = "Planilha de aniversariantes de clientes PF a partir da API do Carteira Advisor, com auditoria cadastral e financeira opcional."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["carteira-advisor", "aniversariantes", "excel", "openpyxl", "ptax", "auditoria"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Natural Language :: Portuguese (Brazilian)",
+    "Private :: Do Not Upload",
+]
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+
+[tool.ruff.lint]
+# E/W: pycodestyle, F: pyflakes, I: isort, B: bugbear, UP: pyupgrade, SIM: simplify, N: naming
+select = ["E", "W", "F", "I", "B", "UP", "SIM", "N"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["."]

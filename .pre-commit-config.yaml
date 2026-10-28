@@ -1,0 +1,37 @@
+# Verificações executadas antes de cada commit (instalação: ver README).
+# Política de dados sensíveis: docs/DECISIONS.md, D27.
+repos:
+  # Credenciais (tokens, senhas, chaves). Achados aceitos ficam em .secrets.baseline.
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: ["--baseline", ".secrets.baseline"]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: detect-private-key
+      - id: check-added-large-files
+        args: ["--maxkb=500"]
+
+  - repo: local
+    hooks:
+      # Nenhum .env, planilha, log, export ou relatório gerado pode entrar no Git.
+      - id: forbid-sensitive-files
+        name: bloquear .env, planilhas, logs e relatórios gerados
+        language: fail
+        entry: "Arquivo sensível não pode ser versionado (ver docs/DECISIONS.md, D27)"
+        files: '(^|/)\.env$|\.(xlsx|xlsm|xls|csv|tsv|log)$|^output/|^logs/'
+        exclude: '(^|/)\.gitkeep$'
+      - id: ruff
+        name: ruff (lint)
+        language: system
+        entry: python -m ruff check
+        types: [python]
+      - id: repository-hygiene
+        name: higiene do repositório (CPF/CNPJ, e-mails, token, arquivos proibidos)
+        language: system
+        entry: python -m pytest -q -p no:anyio tests/test_repository_hygiene.py
+        pass_filenames: false
+        always_run: true

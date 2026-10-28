@@ -1,0 +1,48 @@
+# Política: o repositório contém somente código, configuração sem credenciais,
+# documentação técnica e dados fictícios de teste (ver docs/DECISIONS.md, D27).
+
+# Credenciais e configuração local
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Relatórios gerados (contêm dados pessoais de clientes), diagnósticos e logs
+output/*
+!output/.gitkeep
+logs/*
+!logs/.gitkeep
+*.log
+
+# Planilhas e exportações de dados (nunca versionar dados reais)
+*.xlsx
+*.xlsm
+*.xls
+*.csv
+*.tsv
+
+# Respostas brutas da API e dumps. Arquivos JSON de configuração ou fixtures
+# fictícias necessários ao projeto devem ser liberados explicitamente com "!".
+*.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# Editors / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
