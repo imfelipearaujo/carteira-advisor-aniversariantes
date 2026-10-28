@@ -15,7 +15,6 @@ from decimal import Decimal
 from pathlib import Path
 
 from openpyxl import Workbook
-from openpyxl.comments import Comment
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 
@@ -42,12 +41,6 @@ MONEY_FORMAT = '"R$" #,##0.00;-"R$" #,##0.00'
 _HEADER_FILL = PatternFill("solid", start_color="1F3864")
 _PENDING_FILL = PatternFill("solid", start_color="FFF2CC")
 _MIN_WIDTH, _MAX_WIDTH = 12, 60
-
-
-PROVISIONAL_NOTE = (
-    "Patrimônio PROVISÓRIO: valor de clients.currentValue do cadastro do Carteira Advisor. "
-    "Não auditado nem conciliado com o patrimônio consolidado da empresa."
-)
 
 
 def report_filename(moment: datetime) -> str:
@@ -79,11 +72,7 @@ def write_workbook(rows: list[ReportRow], path: Path, money_unit: MoneyUnit) -> 
         cell.font = Font(bold=True, color="FFFFFF")
         cell.fill = _HEADER_FILL
         cell.alignment = Alignment(vertical="center")
-    # The column name is part of the fixed layout; the provisional nature of the
-    # values is flagged on the header cell and in the file properties.
-    sheet.cell(1, 3).comment = Comment(PROVISIONAL_NOTE, "Carteira Advisor")
     workbook.properties.title = "Aniversariantes — Pessoa Física"
-    workbook.properties.description = PROVISIONAL_NOTE
 
     for row in rows:
         # Excel cells are IEEE doubles; the exact Decimal is only used for the audit.
